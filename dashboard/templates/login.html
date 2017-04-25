@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+{% block content %}
+	<div class="container" id="login_container">
+        <h2>Dashboard Login</h2>
+        {% if data.error %}
+            <p>Your username and password didn't match or you are not authorized to access this application. Please try again.</p>
+        {% endif %}
+        {% if next %}
+            {% if user.is_authenticated %}
+                <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+            {% else %}
+                <p>Please login to see this page.</p>
+            {% endif %}
+        {% endif %}
+
+        <form method="post" action = "/login/">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td>{{ form.username.label_tag }}</td>
+                    <td>{{ form.username }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label_tag }}</td>
+                    <td>{{ form.password }} </td>
+                </tr>
+            </table>
+
+            <button type="submit">Login</button>
+        </form>
+        <p>
+            <a href="https://www.dash.com/IdM" target="_blank">Forgot my Password</a>
+        </p>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </div>
+{% endblock %}

@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+{% load static %}
+{% load tags %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+	{{ data.message }}
+
+	<script type="text/javascript">	
+		$(document).ready(function(){
+			/* Populate the categories and subcategories arrays to be used when selecting them */
+			var categories = `{{ specs_categories }}`;
+			categories = categories.split('\n');
+			var cat_array = new Array();
+			for (category in categories){
+				var main_cat = categories[category].split('=');
+				var the_main_category = main_cat[0].toUpperCase().replace("_"," ");
+				var subcats = main_cat[1].split(";");
+				var subcats_array = new Array();
+				for (subcat in subcats){
+					subcats_array.push(subcats[subcat].toUpperCase().replace("_"," "));
+				}
+				cat_array.push({"name":the_main_category, "subcats":subcats_array});
+				$('#category_dropdown').append("<option value='"+the_main_category+"'>"+the_main_category+"</option>");
+			}
+			
+			/* When the category changes, the subcategories must change as well */
+			$('#category_dropdown').on('change', function(){
+				var l = getSelectList(cat_array, $(this).val());
+				if (l){
+					$('#subcategory_dropdown').html("<option value=''>Select</option>");
+					for (i=0; i<l.length; i++)
+						$('#subcategory_dropdown').append("<option value='"+l[i]+"'>"+l[i]+"</option>");
+				}
+			});
+		});
+	</script>
+
+	<div class='col-lg-9 col-md-9 col-sm-12 col-xs-12 nonpaddedframe'>
+		<div class='main-content'>
+			<h1 class='col-lg-12' id='main_heading'>Dashboard</h1>			
+			<!--Two large buttons at the top -->
+			<div id='large_buttons'>			
+				<div class='col-lg-6 col-md-6 col-sm-12 col-xs-12 button_container' style='padding-left:0'>
+					<div class='large_button' id='large_button_1'>
+						<a href="https://info.dash.com">
+							<div class='large_button_content'>
+								<img src='{% static "images/dash-info-logo.png" %}'/>
+								<p class='bottom'>Project documents, notes ..</p>
+							</div>
+						</a>
+					</div>
+				</div>		
+				<div class='col-lg-6 col-md-6 col-sm-12 col-xs-12 button_container' style='padding-right:0'>
+					<div class='large_button' id='large_button_2'>
+						<a href="http://www.dash.com">
+							<div class='large_button_content'>
+								<img src='{% static "images/dash_logo.png" %}' />
+								<p class='bottom'>Proceed to Dash.com</p>
+							</div>
+						</a>
+					</div>
+				</div>
+			</div>
+			
+			{% if user.is_authenticated %}
+				<!-- User profile area -->
+				<div id='user_profile' class='col-lg-12 col-sm-12 col-xs-12' style='padding-left:0'>
+					<!-- User photo -->
+					<div id='user_profile_photo' class='user_profile_block'>
+						<div id='user_profile_photo_container'>
+							<button id='user_profile_photo_button' role="link" type="button" data-toggle="modal" data-target="#upload_photo_form">
+								<img src="{% static 'images/edit_photo_icon.png' %}" />
+							</button>
+							<img src="{{ data.userphoto }}"/>
+						</div>
+						<!--Upload Photo Form-->
+						<div class="modal fade" id="upload_photo_form" tabindex="-1" role="dialog" aria-labelledby="upload_photo_form_label" aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">
+											<span aria-hidden="true">&times;</span>
+											<span class="sr-only">Close</span>
+										</button>
+										<h4 class="modal-title" id="upload_photo_form_label">Upload New Profile Photo</h4>
+									</div><!--.modal-header-->
+									<div class="modal-body">
+										{% include "upload_photo_form.html" %}
+									</div><!--.modal-body-->
+								</div><!--.modal-content-->
+							</div><!--.modal-dialog-->
+						</div> <!--#upload_photo_form-->
+					</div>
+					<div id='user_profile_info' class='user_profile_block'>
+						<div>
+							<h2 class='profile_heading'>{{ data.fullname }}</h2>
+							<div class="user_title">
+								{{ data.title }}
+							</div>
+							{% if data.company != '' %}
+								<div class="user_company">
+									<ul>
+										<li><span>{{ data.company }}</span></li>
+									</ul>
+								</div>
+							{% endif %}
+							<p id="photo_upload_errors" class="error">{{ upload_photo_form..non_field_errors }}</p>
+							<div id="edit_profile_button">
+								<a class="btn btn-primary" href="#" id="update_info_message" data-toggle="modal" data-target="#update_info_modal">Edit my profile</a>
+								<a class="btn btn-primary" href="https://www.dash.com/IdM/" target="_blank">Change my password</a>
+							</div>
+						</div>
+					</div>
+					<!--Upload User Info Form-->
+					<div class="modal fade" id="update_info_modal" tabindex="-1" role="dialog" aria-labelledby="update_info_form_label" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">
+										<span aria-hidden="true">&times;</span>
+										<span class="sr-only">Close</span>
+									</button>
+									<h4 class="modal-title" id="update_info_form_label">Update your profile information</h4>
+								</div><!--.modal-header-->
+								<div class="modal-body">
+									{% include "update_info_form.html" %}
+								</div><!--.modal-body-->
+							</div><!--.modal-content-->
+						</div><!--.modal-dialog-->
+					</div> <!--#update_info_modal-->
+				</div>
+				
+				<!--Email subscriptions-->
+				{% if data.usertype != 'vendor' %}
+					<div class='col-lg-12 col-sm-12 col-xs-12' id='email_subscriptions'>
+						<div class='heading'>
+							<div><img src='{% static "images/email_icon.png" %}'/></div>
+							<div><h3>Email Subscriptions</h3></div>
+							<div><a target='_blank' class='nounderline' href='https://community.dash.com/subscriptions'>manage</a></div>
+						</div>
+						<div class="long_info">
+							<ul class='two_column_list'>
+								{% for subscription in subscriptions %}
+									<li>
+										<span>{{ subscription }}</span>
+									</li>
+								{% endfor %}
+							</ul><!--#themes_list-->
+						</div>
+					</div>	
+				{% endif %}
+			{% endif %}
+		</div>
+		<div class='divider'></div>
+		<div class='main-content' id='upcoming_events'>
+			<div class='heading'>
+				<div><img src='{% static "images/event_icon.png" %}'/></div>
+				<div><h3>Upcoming Events</h3></div>
+			</div>
+			<div class="long_info">
+				<ul class='two_column_list' id='dash_events'>
+					{% for entry in rss.entries %}
+						<li>
+							<div class='event_item'>
+								<div class='date_sticker'>
+									<div class='month'>
+										{{ entry.published | event_month }}
+									</div>
+									<div class='date'>
+										{{ entry.published | event_date }}
+									</div>
+								</div>
+								<div class='event_title'>
+									<a href='{{ entry.link }}' target='_blank'>{{ entry.title }}</a>
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class='divider'></div>
+		<div class='main-content' id='specification_search'>
+			<div class='heading'>
+				<div><img src='{% static "images/specification_icon.png" %}'/></div>
+				<div><h3>Specifications Library Search</h3></div>
+			</div>
+			<div id="specifications_library_search" class="long_info">
+				<form action='http://www.dash.com/specification/?' target='_blank'>
+					<div class='row'>
+						<div class='col-lg-4 col-md-6 col-sm-12 col-xs-12 sameheight'>
+							<input name='query' placeholder='Keyword or designation number' type='text'/>
+						</div>
+						<div class='col-lg-4 col-md-3 col-sm-12 col-xs-12 sameheight'>
+							<input name='content' type='checkbox'/>
+							<label>Search file content</label>
+						</div>
+						<div class='col-lg-4 col-md-3 col-sm-12 col-xs-12 sameheight'>
+							<input name='archives' type='checkbox'/>
+							<label>Include archives</label>
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-lg-3 col-md-12 col-sm-12 col-xs-12 sameheight'>
+							<label>Project category</label>
+							<div class='select-container'>
+								<select name='category' id='category_dropdown'>
+									<option value="">Select</option>
+									{% for category in project_categories %}
+										<option value="{{ category }}">{{ category }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+						<div class='col-lg-3 col-md-12 col-sm-12 col-xs-12 sameheight'>
+							<label>Subcategory</label>
+							<div class='select-container'>
+								<select name='subcat'  id='subcategory_dropdown'>
+									<option value="">Select</option>
+								</select>
+							</div>
+						</div>
+						<div class='col-lg-3 col-md-12 col-sm-12 col-xs-12 sameheight'>
+							<label>Document type</label>
+							<div class='select-container'>
+								<select name='doctype' id='doctype_dropdown'>
+									<option value="">Select</option>
+									{% for doctype in doctypes %}
+										<option value="{{ doctype }}">{{ doctype }}</option>
+									{% endfor %}
+								</select>
+							</div>	
+						</div>
+						<div class='col-lg-3 col-md-12 col-sm-12 col-xs-12 sameheight'>
+							<button type='submit' class='search_button'><i class="fa fa-search"></i></button>
+						</div>
+					</div>
+					<div class='row'>
+						<div class='col-md-12'>
+							
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class='divider'></div>		
+		<div class='main-content' id='resources'>
+			<div class='heading'>
+				<div><img src='{% static "images/resources_icon.png" %}'/></div>
+				<div><h3>Resources</h3></div>
+			</div>
+			<div id="useful_links"  class="long_info">
+				<ul>
+					{% if not user.is_authenticated %}
+						<li>		
+							<a href="https://www.dash.com/account_registration/" target="_blank">Create an Account</a>
+							<div class='description'>Create a Dashboard account to access additional information</div>		
+						</li>
+					{% endif %}
+					
+					<li>
+						<a href="https://www.dash.com/IdM/" target="_blank">{% if user.is_authenticated %}Change{% else %}Reset{% endif %} Password</a> 
+					</li>
+					{% if data.usertype == 'vendor' %}
+						<li>
+							<a href="http://www.dash.com/specs/certification/" target="_blank">Certification</a>
+							<div class='description'>
+								<p>The process to certify products at Dash is detailed here.</p>
+							</div>
+						</li>
+						<li>
+							<a href="https://apps.dash.com/forms/forms/dash%20Confidential%20Information%20Access%20Agreement%20-%20NDA_06302018_516.html" target="_blank">Update NDA</a>
+							<div class='description'>
+								<p>Add or update an NDA for your user account</p>
+							</div>
+						</li>
+						<li>
+							<a href="https://apps.dash.com/forms/forms/OPEN%20SOURCE%20PROJECT%20CONTRIBUTOR%20AGREEMENT_10312018_627.html" target="_blank">Open Source Agreement</a>
+							<div class='description'>
+								<p></p>
+							</div>
+						</li>
+						<li>
+							<a href="https://apps.dash.com/forms/forms/Supplier%20Engagement%20Inquiry_12312027_525.html" target="_blank">Engagement Inquiry</a>
+							<p></p>
+						</li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class='col-lg-3 col-md-3 col-sm-12 col-xs-12' id='tv_videos'>
+		<div class='content'>
+			<div class='heading'>
+				<div><img src='{% static "images/tv_icon.png" %}'/></div>
+				<div><h3>TV</h3></div>
+				<div><a href='https://tv.dash.com' class='nounderline' target='_blank'>view all</a></div>
+			</div>
+			<div id="tv_videos_content">
+				<ul>
+					{% for video in tv %}
+						<li>
+							<a href="#" data-toggle="modal" data-target="#video_{{video.pk}}">
+								<div class='tv_image'>
+									<img src="https://tv.dash.com{{video.file}}.jpg" />
+									<span>{{video.name}}</span>
+									<div class='play'>
+										<img src='{% static "images/playbutton.png" %}' />
+									</div>
+								</div>
+							</a>
+							<div class="modal fade" id="video_{{video.pk}}" tabindex="-1" role="dialog" aria-labelledby="video_{{video.pk}}" aria-hidden="true">
+								<div class="modal-dialog" style='width:650px;'>
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal">
+												<span aria-hidden="true">&times;</span>
+												<span class="sr-only">Close</span>
+											</button>
+											<h4 class="modal-title">{{video.name}}</h4>
+										</div><!--.modal-header-->
+										<div class="modal-body">
+											<iframe src="https://tv.dash.com/embed/{{video.pk}}/?width=600&height=500" class="tv_popup_video"></iframe>
+										</div><!--.modal-body-->
+									</div><!--.modal-content-->
+								</div><!--.modal-dialog-->
+							</div> <!--#update_info_modal-->
+						</li>
+					{% endfor %}
+				</ul>
+			</div><!--#tv_videos-->
+		</div>
+	</div>
+	
+	
+{% endblock %}

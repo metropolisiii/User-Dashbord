@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+{{ data.message }}
+
+<script type="text/javascript">	
+	$(document).ready(function(){
+		/* Populate the categories and subcategories arrays to be used when selecting them */
+		var categories = `{{ specs_categories }}`;
+		categories = categories.split('\n');
+		var cat_array = new Array();
+		for (category in categories){
+			var main_cat = categories[category].split('=');
+			var the_main_category = main_cat[0].toUpperCase().replace("_"," ");
+			var subcats = main_cat[1].split(";");
+			var subcats_array = new Array();
+			for (subcat in subcats){
+				subcats_array.push(subcats[subcat].toUpperCase().replace("_"," "));
+			}
+			cat_array.push({"name":the_main_category, "subcats":subcats_array});
+			$('#category_dropdown').append("<option value='"+the_main_category+"'>"+the_main_category+"</option>");
+		}
+		
+		/* When the category changes, the subcategories must change as well */
+		$('#category_dropdown').on('change', function(){
+			var l = getSelectList(cat_array, $(this).val());
+			if (l){
+				$('#subcategory_dropdown').html("<option value=''>Select</option>");
+				for (i=0; i<l.length; i++)
+					$('#subcategory_dropdown').append("<option value='"+l[i]+"'>"+l[i]+"</option>");
+			}
+		});
+	});
+</script>
+
+<div class="row large_row">
+	<!-- Name and Company -->
+	{% if user.is_authenticated %}
+		<div class="col-md-8 col-sm-8 col-xs-12">
+	{% else %}
+		<div class="col-md-12 col-sm-12 col-xs-12">
+	{% endif %}
+		{% include "user_info.html" %}
+	</div>	
+	{% if user.is_authenticated %}
+		<!--Profile Photo-->
+		<div class="col-md-4 col-sm-4 col-xs-12">
+			{% include "profile_photo.html" %}
+		</div>
+	{% endif %}	
+	<div class="dashrow" id="quicklinks">
+		{% include "quicklinks.html" %}
+	</div><!--#quicklinks-->
+	{% if user.is_authenticated %}
+		<div class="col-md-8 col-sm-8 col-xs-12">		
+			{% if data.usertype == 'vendor' %}
+				{% include "userful_links.html" %}
+			{% else %}						
+				{% include "subscriptions.html" %}
+			{% endif %}
+		</div>
+	{% endif %}
+		
+	<!--Events-->
+	<div class="{% if user.is_authenticated %}col-md-4 col-sm-4{% endif %} col-xs-12">
+		{% include "events.html" %}
+	</div><!--.tabel-cell-->
+
+	
+	<!--CableLabsTV -->
+	<div class="col-md-8 col-sm-8 col-xs-12">
+		{% include "cablelabstv.html" %}
+	</div>	
+	
+	<!--Subscription Search -->
+	<div class="col-md-12 col-sm-12 col-xs-12">		
+		{% include "specsearch.html" %}
+	</div>
+</div><!--.row-->
+
+{% endblock %}

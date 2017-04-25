@@ -1,0 +1,29 @@
+<div class="x_panel">
+	<div class="x_content">
+		<div class="profile_photo">
+			<img src="{{ data.userphoto }}"/>
+			<div>
+				<button class="btn btn-primary" role="link" type="button" data-toggle="modal" data-target="#upload_photo_form">
+					Update profile photo
+				</button>
+				<!--Upload Photo Form-->
+				<div class="modal fade" id="upload_photo_form" tabindex="-1" role="dialog" aria-labelledby="upload_photo_form_label" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">&times;</span>
+									<span class="sr-only">Close</span>
+								</button>
+								<h4 class="modal-title" id="upload_photo_form_label">Upload New Profile Photo</h4>
+							</div><!--.modal-header-->
+							<div class="modal-body">
+								{% include "upload_photo_form.html" %}
+							</div><!--.modal-body-->
+						</div><!--.modal-content-->
+					</div><!--.modal-dialog-->
+				</div> <!--#upload_photo_form-->
+			</div>
+		</div>
+	</div>
+</div>

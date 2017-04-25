@@ -1,0 +1,19 @@
+<div class="x_panel">
+	<div class="x_content">			
+		<div class="user_info_panel">
+			<div id="go_to_subscriptions">
+				<a target="_blank" class="btn btn-primary" href="https://community.dash.com/subscriptions">Change My Subscriptions</a>
+			</div>
+			<h2><label>My Subscriptions</label></h2>
+			<div class="long_info">
+				<ul id='themes_list'>
+					{% for subscription in subscriptions %}
+						<li>
+							{{ subscription }}
+						</li>
+					{% endfor %}
+				</ul><!--#themes_list-->
+			</div>
+		</div>
+	</div>
+</div><!--.user_info_panel-->

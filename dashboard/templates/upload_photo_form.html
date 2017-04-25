@@ -1,0 +1,16 @@
+{% load static %}
+
+<!--Upload photo form -->
+<div>
+	<form id="upload_photo_form_form" action = "/image_save/" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<p id="photo_upload_errors" class="error">{{ upload_photo_form..non_field_errors }}</p>
+		<p>{{ upload_photo_form.img.label_tag }} {{ upload_photo_form..img.help_text }}</p>
+		<p style='text-align:center'>
+			{{ upload_photo_form.img.errors }}
+			{{ upload_photo_form.img }}
+		</p>
+		<p><input type="submit" value="Upload" /></p>
+	</form>
+</div>
+

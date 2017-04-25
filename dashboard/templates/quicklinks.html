@@ -1,0 +1,14 @@
+<div class="col-md-{{ data.quicklinks_column_size }} col-sm-6 col-xs-6">
+	<a class="btn btn-primary" href="https://info.dash.com" target="_blank">Info</a> 
+</div>
+<div class="col-md-{{ data.quicklinks_column_size }} col-sm-6 col-xs-6">
+	<a class="btn btn-primary" href="http://www.dash.com" target="_blank">Dashboard</a> 
+</div>
+{% if not user.is_authenticated %}
+	<div class="col-md-3 col-sm-6 col-xs-6">
+		<a class="btn btn-primary" href="https://www.dash.com/account_registration/" target="_blank">Create an Account</a> 
+	</div>
+{% endif %}
+<div class="col-md-{{ data.quicklinks_column_size }} col-sm-6 col-xs-6">
+	<a class="btn btn-primary" href="https://www.dash.com/IdM/" target="_blank">{% if user.is_authenticated %}Change{% else %}Reset{% endif %} Password</a> 
+</div>

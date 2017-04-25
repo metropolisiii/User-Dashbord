@@ -1,0 +1,20 @@
+<div class="x_panel">
+	<div class="x_content">
+		<div id="go_to_tv">
+			<a target="_blank" class="btn btn-primary" href="https://tv.dash.com">Go to TV</a>
+		</div>
+		<div class="x_panel_title">
+			<h2><label>TV</label></h2>
+		</div>
+		<div id="tv_videos">
+			<ul>
+				{% for video in tv %}
+					<li>
+						<img src="https://tv.dash.com{{video.file}}.jpg" />
+						<a target="_blank" href="https://tv.dash.com/v/{{video.pk}}">{{video.name}}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div><!--#tv_videos-->
+	</div>
+</div>

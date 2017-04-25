@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+		<title>Dashboard | {% block title %}{% endblock %}</title>		
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="{% static 'js/jquery.matchHeight.min.js' %}" type="text/javascript"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/jquery-ui.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+		<script src="{% static 'js/scripts.js' %}"></script>
+		<script src="https://use.typekit.net/fis2cku.js"></script>
+		<script>try{Typekit.load({ async: true });}catch(e){}</script>
+		{% block scripts %}
+		{% endblock %}
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="{% static "bower_components/gentelella/vendors/font-awesome/css/font-awesome.min.css" %}">
+		<link rel="stylesheet" href="{% static "css/styles_new.css" %}" type="text/css" />		
+		<link rel="stylesheet" href="{% static "css/responsive.css" %}" type="text/css" />		
+		<link rel="stylesheet" href="{% static "css/croppic.css" %}" type="text/css" />		
+		{% block styles %}
+		{% endblock %}
+	</head>
+	<body class="nav-md">
+		<div id="content" class="container-fluid body">
+			<div id='right_user_login'>
+				{% if user.is_authenticated %}
+					<a href='/logout/' class='btn btn-primary'>Log out</a>
+				{% else %}
+					<a href='/login/' class='btn btn-primary'>Log in</a>
+				{% endif %}
+			</div>
+			<nav class="nav-side-menu" id="left-column" role="navigation">
+				<div class="brand"><a href="http://www.dash.com"><div id="logo"><img src='/static/images/logo.png'/></div></a></div>
+				<i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+				<div class="menu-list">
+					<ul id="menu-content" class="menu-content collapse out">
+						<li class='active'>
+							<a href="/"><img src="/static/images/dashboard_gear.png"/><div>Dashboard</div></a>
+						</li>	
+						<li>
+							<a href="https://info.dash.com"><img src="/static/images/info_icon.png"/><div>Infozone</div></a>
+						</li>
+						{% if data.userphoto %}
+							<li id='user_photo'>
+								<img src="{{ data.userphoto }}" />
+								<div id="user_fullname">
+									{{ data.fullname }}
+								</div>
+							</li>
+						{% endif %}
+					</ul>
+				</div>
+			</nav>
+			<div class="main">
+				<div id='user_profile_options'>
+					<ul>
+						{% if user.is_authenticated %}
+							<li><a href="#" data-toggle="modal" data-target="#update_info_modal">My profile</a></li>
+							<li><a href='/logout/'>logout</a></li>
+						{% else %}
+							<li><a href="/login/">Login</a></li>
+						{% endif %}
+					</ul>
+				</div>
+				{% block content %}
+				{% endblock %}
+			</div>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,15 @@
+{% load tags %}
+<div class="x_panel">
+	<div class="x_content">
+		<div class="content">
+			<div class="user_info_panel">
+				<h2><label>Events</label></h2>
+				<ul id='dash_events'>
+					{% for entry in rss.entries %}
+						<li><a href='{{ entry.link }}' target='_blank'>{{ entry.title }} - {{ entry.published | convert_epoch_to_date }}</a></li>
+					{% endfor %}
+				</ul>
+			</div><!--.user_info_panel-->
+		</div><!--.content-->
+	</div><!--.x_content-->
+</div><!--.x_panel-->

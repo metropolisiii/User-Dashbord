@@ -1,0 +1,70 @@
+@media only screen and (max-width:992px){
+	#header {
+		height: auto;
+	}
+	#logo{
+		text-align:center;
+	}
+	#header_photo {
+		width: 100%;
+		text-align: center;
+	}
+	#header_photo ul {
+		display: table;
+		margin-left: auto !important;
+		margin-right: auto !important;
+		margin-bottom: 15px;
+		text-align: center;
+		float: none !important;
+	}
+	.nav li {
+		display: table-cell;
+	}
+	#edit_profile_button{
+		position: relative;
+		text-align: left; 
+	}
+}
+@media only screen and (max-width:767px){
+	.navbar-nav {
+		margin: -0.5px -15px;
+	}
+	.row {
+		margin-right: auto;
+		margin-left: 0;
+	}
+	#edit_profile_button, #go_to_subscriptions, #go_to_cablelabstv {
+		position:relative;
+	}
+}
+
+@media only screen and (max-width:480px){
+	#logo img {
+		width: 100%;
+	}
+	.x_panel{
+		padding:0;
+	}
+	#go_to_cablelabstv {
+		position: relative;
+	}
+	label {
+		display: block;
+	}
+	.short_info {
+		display: block;
+		margin-bottom: 15px;
+	}
+	.main_container {
+		padding: 0;
+	}
+	#cablelabstv_videos ul {
+		margin: 0;
+	}
+}
+
+@media only screen and (max-width:320px){
+	.btn{
+		font-size:10px;		
+	}
+}

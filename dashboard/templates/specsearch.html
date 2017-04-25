@@ -1,0 +1,58 @@
+<div class="x_panel">
+	<div class="x_content">
+		<div id="go_to_subscriptions">
+			<a target="_blank" class="btn btn-primary" href="http://www.dash.com/specification">Go to Specifications</a>
+		</div>
+		<div class="x_panel_title">
+			<h2><label>Specifications Library Search</label></h2>
+		</div>
+		<div id="specifications_library_search">
+			<form action='http://www.dash.com/specification/?' target='_blank'>
+				<div class='col-md-6 col-sm-12 col-xs-12 sameheight'>
+					<input name='query' placeholder='Enter keyword or designation number' type='text'/>
+				</div>
+				<div class='col-md-3 col-sm-12 col-xs-12 sameheight'>
+					<input name='content' type='checkbox'/>
+					<label>Search File Content</label>
+				</div>
+				<div class='col-md-3 col-sm-12 col-xs-12 sameheight'>
+					<input name='archives' type='checkbox'/>
+					<label>Include Archives</label>
+				</div>
+				<div class='col-md-4 col-sm-12 col-xs-12 sameheight'>
+					<label>Project Category</label>
+					<div class='select-container'>
+						<select name='category' id='category_dropdown'>
+							<option value="">Select</option>
+							{% for category in project_categories %}
+								<option value="{{ category }}">{{ category }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class='col-md-4 col-sm-12 col-xs-12 sameheight'>
+					<label>Subcategory</label>
+					<div class='select-container'>
+						<select name='subcat'  id='subcategory_dropdown'>
+							<option value="">Select</option>
+						</select>
+					</div>
+				</div>
+				<div class='col-md-4 col-sm-12 col-xs-12 sameheight'>
+					<label>Document Type</label>
+					<div class='select-container'>
+						<select name='doctype' id='doctype_dropdown'>
+							<option value="">Select</option>
+							{% for doctype in doctypes %}
+								<option value="{{ doctype }}">{{ doctype }}</option>
+							{% endfor %}
+						</select>
+					</div>	
+				</div>
+				<div class='col-md-12'>
+					<input type='submit' class='btn btn-primary' value='Search' />
+				</div>
+			</form>
+		</div><!--#tv_videos-->
+	</div>
+</div>

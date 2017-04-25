@@ -1,0 +1,71 @@
+<div class="x_panel">
+	<div class="x_content">
+		<div class="content">					
+			{% if user.is_authenticated %}
+				<div id="edit_profile_button">
+					<p><a class="btn btn-primary" href="#" id="update_info_message" data-toggle="modal" data-target="#update_info_modal">Edit</a></p>
+					<p><a target="_blank"class="btn btn-primary" href="https://www.dash.com/IdM">Change Password</a></p>
+				</div>
+				<p class="row">Hello <b>{{ data.fullname }}</b>,</p>
+				<div style='margin-top:20px'>
+					<div class="row">
+						<label>Company: </label>
+						<div class="short_info">
+							{{ data.company }}
+						</div>
+					</div>
+					<div class="row">
+						<label>Email: </label>
+						<div class="short_info">
+							{{ data.email }}
+						</div>
+					</div>
+					<div class="row">
+						<label>Title: </label>
+						<div class="short_info">
+							{{ data.title }}
+						</div>
+					</div>
+					<div class="row">
+						<label>Address: </label>
+						<div class="short_info">
+							{{ data.address }}
+						</div>
+					</div>
+					<div class="row">
+						<label>Phone: </label>
+						<div class="short_info">
+							{{ data.phone }}
+						</div>
+					</div>
+					<div class="row">
+						<label>Bio: </label>
+						<div class="long_info">
+							{{ data.bio }}
+						</div>
+					</div>
+				</div>
+	
+				<!--Upload User Info Form-->
+				<div class="modal fade" id="update_info_modal" tabindex="-1" role="dialog" aria-labelledby="update_info_form_label" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">
+									<span aria-hidden="true">&times;</span>
+									<span class="sr-only">Close</span>
+								</button>
+								<h4 class="modal-title" id="update_info_form_label">Update your profile information</h4>
+							</div><!--.modal-header-->
+							<div class="modal-body">
+								{% include "update_info_form.html" %}
+							</div><!--.modal-body-->
+						</div><!--.modal-content-->
+					</div><!--.modal-dialog-->
+				</div> <!--#update_info_modal-->
+			{% else %}
+				<p>For your personalized dashboard, please <a style="text-decoration:underline;" href="/login/">log in</a>.</p>
+			{% endif %}
+		</div>
+	</div>
+</div>

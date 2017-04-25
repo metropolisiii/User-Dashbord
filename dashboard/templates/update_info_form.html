@@ -1,0 +1,14 @@
+{% load static %}
+
+<!--Update info form -->
+<div>
+	<form id="update_info_form" action = "/update_info/" method="post">
+		{% csrf_token %}
+		<p id="update_info_errors" class="error">{{ update_info_form.non_field_errors }}</p>
+		<ul id = "update_info_field">
+			{{ update_info_form.as_ul }}
+		</ul>
+		<input type="submit" value="Change my Information" />
+	</form>
+</div>
+
